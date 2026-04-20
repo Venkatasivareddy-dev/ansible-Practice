@@ -1,0 +1,9 @@
+- name: create user on all web servers
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Create user siva
+      user:
+        name: siva
+        state: present
