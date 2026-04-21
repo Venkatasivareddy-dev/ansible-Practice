@@ -1,0 +1,22 @@
+---
+- name: Bootstrap SSH key to all servers
+  hosts: web
+  become: yes
+
+  vars:
+    ssh_user: ec2-user
+
+  tasks:
+    - name: Ensure .ssh directory exists
+      file:
+        path: "/home/{{ ssh_user }}/.ssh"
+        state: directory
+        owner: "{{ ssh_user }}"
+        group: "{{ ssh_user }}"
+        mode: '0700'
+
+    - name: Add new public key
+      authorized_key:
+        user: "{{ ssh_user }}"
+        key: "{{ lookup('file', 'mynewkey.pub') }}"
+        state: present
